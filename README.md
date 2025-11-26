@@ -2,22 +2,12 @@
 
 Peekerino is a Windows tray utility that lets you press `Ctrl+Alt+Space` in File Explorer to peek at the selected item. It shows metadata, previews text files, streams CSV rows with quick stats, summarizes XML-files, pretty-prints JSON, lists ZIP contents, and analyzes binaries without opening heavyweight tools.
 
-> Roadmap: upcoming builds will add customizable hotkey, user-configurable preview length. Suggestions welcome in the issue tracker.
-
 ## Quick Start
 
 1. Clone the repository.
 2. Install the .NET SDK 9.0 preview or newer.
 3. From the repo root run `dotnet run --project peekerino.csproj` (or `dotnet build`).
 4. With the app running, press `Ctrl+Alt+Space` while a file or folder is selected in Explorer to open the preview window.
-
-## Recent Peek Highlights
-
-- INCA XML documents: structured summaries with tabular benefits, roles, and reserves.
-- CSV files: column stats plus the first 100 rows in a grid view.
-- JSON files: pretty-printed output with automatic truncation for huge payloads.
-- ZIP/TAR/TGZ/GZ archives: table of contents and a text preview of the first readable entry.
-- Binary files: hash, entropy, hex dump, and printable string samples.
 
 ## Configuration
 
