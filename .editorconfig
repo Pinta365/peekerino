@@ -1,0 +1,10 @@
+   root = true
+
+   [*.cs]
+   indent_style = space
+   indent_size = 4
+   insert_final_newline = true
+   dotnet_style_qualification_for_field = false:suggestion
+   csharp_new_line_before_open_brace = all
+   csharp_style_var_for_built_in_types = true:suggestion
+   csharp_prefer_braces = true:silent
