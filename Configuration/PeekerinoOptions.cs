@@ -24,6 +24,7 @@ namespace Peekerino.Configuration
             public int ExcelMaxColumns { get; set; } = 20;
             public int ExcelMaxRowsToScan { get; set; } = 2_000;
             public int ExcelMaxCellCharacters { get; set; } = 120;
+            public int MarkdownMaxCharacters { get; set; } = 20_000;
             public int BinaryHeaderBytes { get; set; } = 256;
             public int BinaryEntropySampleBytes { get; set; } = 64 * 1024;
             public int BinaryStringScanBytes { get; set; } = 4 * 1024;
