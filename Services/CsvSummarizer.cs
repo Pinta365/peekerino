@@ -28,7 +28,9 @@ namespace Peekerino.Services
                     return new CsvSummaryResult(headers, previewRows, summary.ToString(), rowCount, truncated);
                 }
 
-                headers.AddRange(SplitCsvLine(headerLine));
+                char delimiter = DetectDelimiter(headerLine);
+                headers.AddRange(SplitCsvLine(headerLine, delimiter));
+                summary.AppendLine($"Detected delimiter: {DescribeDelimiter(delimiter)}");
                 summary.AppendLine("CSV Columns:");
                 for (int i = 0; i < headers.Count; i++)
                 {
@@ -47,7 +49,7 @@ namespace Peekerino.Services
                     cancellationToken.ThrowIfCancellationRequested();
                     rowCount++;
 
-                    var cells = SplitCsvLine(line);
+                    var cells = SplitCsvLine(line, delimiter);
 
                     if (previewRows.Count < maxPreviewRows)
                     {
@@ -110,7 +112,7 @@ namespace Peekerino.Services
             return new CsvSummaryResult(headers, previewRows, summary.ToString(), rowCount, truncated);
         }
 
-        private static List<string> SplitCsvLine(string line)
+        private static List<string> SplitCsvLine(string line, char delimiter)
         {
             var result = new List<string>();
             var current = new StringBuilder();
@@ -131,7 +133,7 @@ namespace Peekerino.Services
                         inQuotes = !inQuotes;
                     }
                 }
-                else if (c == ',' && !inQuotes)
+                else if (c == delimiter && !inQuotes)
                 {
                     result.Add(current.ToString().Trim());
                     current.Clear();
@@ -145,6 +147,64 @@ namespace Peekerino.Services
             result.Add(current.ToString().Trim());
             return result;
         }
+
+        private static char DetectDelimiter(string line)
+        {
+            var candidates = new[] { ',', ';', '\t', '|', ':' };
+            char bestDelimiter = ',';
+            int bestCount = -1;
+
+            foreach (var candidate in candidates)
+            {
+                int count = CountOccurrences(line, candidate);
+                if (count > bestCount)
+                {
+                    bestCount = count;
+                    bestDelimiter = candidate;
+                }
+            }
+
+            return bestCount > 0 ? bestDelimiter : ',';
+        }
+
+        private static int CountOccurrences(string line, char delimiter)
+        {
+            bool inQuotes = false;
+            int count = 0;
+
+            for (int i = 0; i < line.Length; i++)
+            {
+                char c = line[i];
+                if (c == '"')
+                {
+                    if (inQuotes && i + 1 < line.Length && line[i + 1] == '"')
+                    {
+                        i++;
+                    }
+                    else
+                    {
+                        inQuotes = !inQuotes;
+                    }
+                }
+                else if (c == delimiter && !inQuotes)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static string DescribeDelimiter(char delimiter) =>
+            delimiter switch
+            {
+                '\t' => "Tab (\\t)",
+                ';' => "Semicolon (;)",
+                '|' => "Pipe (|)",
+                ':' => "Colon (:)",
+                ',' => "Comma (,)",
+                _ => delimiter.ToString()
+            };
 
         private static string[] ToRowArray(int columnCount, IList<string> cells)
         {
