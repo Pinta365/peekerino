@@ -42,9 +42,15 @@ Peekerino loads options from `appsettings.json` (copied alongside the executable
 Use the included PowerShell script to generate a distributable build:
 
 ```powershell
-.\publish.ps1              # Release, win-x64, self-contained, single file
+# Default: Release, win-x64, self-contained single file
+.\publish.ps1
+
+# Alternate runtime/config combos
 .\publish.ps1 -Runtime win-arm64
 .\publish.ps1 -SelfContained:$false -SingleFile:$false
+
+# Build, create git tag, push it (push triggers the GitHub release workflow)
+.\publish.ps1 -Tag v0.6.0 -PushTag
 ```
 
 Packages land in `bin/<Configuration>/net9.0-windows/<Runtime>/publish/`.
