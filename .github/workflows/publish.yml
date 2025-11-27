@@ -110,6 +110,54 @@ jobs:
             Compress-Archive -Path (Join-Path $publishPath '*') -DestinationPath $zipPath
           }
 
+      - name: Generate release notes
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $currentTag = "${{ github.ref_name }}"
+          $notesPath = Join-Path $PWD "artifacts/release-notes.md"
+
+          $tagList = git tag --sort=-creatordate
+          $previousTag = $null
+          foreach ($tag in $tagList) {
+            if ($tag -eq $currentTag) { continue }
+            $previousTag = $tag
+            break
+          }
+
+          if ($previousTag) {
+            $range = "$previousTag..$currentTag"
+            $changes = git log $range --no-merges '--pretty=format:- %h %s'
+            $changesHeading = "### Changes since $previousTag"
+          } else {
+            $changes = git log $currentTag --no-merges '--pretty=format:- %h %s'
+            $changesHeading = "### Changes"
+          }
+
+          if (-not $changes) {
+            $changes = "- No commits found."
+          }
+
+          $lines = @(
+            "## Peekerino $currentTag",
+            "",
+            "A lightweight Windows tray app for peeking at file contents (CSV, JSON, XML, ZIP/TAR, binaries) with a single hotkey.",
+            "",
+            "### 📦 Downloads",
+            "",
+            "- **Peekerino-$currentTag-win-x64.zip** - Self-contained build for 64-bit Windows",
+            "- **Peekerino-$currentTag-win-arm64.zip** - Self-contained build for ARM64 Windows",
+            "",
+            "Each package contains the single-file executable and config (`appsettings.json`).",
+            "",
+            $changesHeading,
+            ""
+          )
+
+          $lines += $changes
+
+          Set-Content -Path $notesPath -Value $lines -Encoding UTF8
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -121,17 +169,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: artifacts/*.zip
-          body: |
-            ## Peekerino ${{ github.ref_name }}
-
-            A lightweight Windows tray app for peeking at file contents (CSV, JSON, XML, ZIP/TAR, binaries) with a single hotkey.
-
-            ### 📦 Downloads
-
-            - **Peekerino-${{ github.ref_name }}-win-x64.zip** - Self-contained build for 64-bit Windows
-            - **Peekerino-${{ github.ref_name }}-win-arm64.zip** - Self-contained build for ARM64 Windows
-
-            Each package contains the single-file executable and config (`appsettings.json`).
+          body_path: artifacts/release-notes.md
 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
