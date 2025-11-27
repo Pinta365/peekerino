@@ -19,6 +19,11 @@ namespace Peekerino.Configuration
             public int JsonMaxCharacters { get; set; } = 40_000;
             public int ArchiveMaxEntries { get; set; } = 100;
             public int ArchivePreviewBytes { get; set; } = 512;
+            public int ExcelMaxSheets { get; set; } = 3;
+            public int ExcelMaxRows { get; set; } = 100;
+            public int ExcelMaxColumns { get; set; } = 20;
+            public int ExcelMaxRowsToScan { get; set; } = 2_000;
+            public int ExcelMaxCellCharacters { get; set; } = 120;
             public int BinaryHeaderBytes { get; set; } = 256;
             public int BinaryEntropySampleBytes { get; set; } = 64 * 1024;
             public int BinaryStringScanBytes { get; set; } = 4 * 1024;

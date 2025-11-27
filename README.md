@@ -1,6 +1,6 @@
 # Peekerino
 
-Peekerino is a Windows tray utility that lets you press `Ctrl+Alt+Space` in File Explorer to peek at the selected item. It shows metadata, previews text files, streams CSV rows with quick stats, summarizes XML-files, pretty-prints JSON, lists ZIP contents, and analyzes binaries without opening heavyweight tools.
+Peekerino is a Windows tray utility that lets you press `Ctrl+Alt+Space` in File Explorer to peek at the selected item. It shows metadata, previews text files, streams CSV rows with quick stats, samples Excel sheets, summarizes XML files, pretty-prints JSON, lists ZIP contents, and analyzes binaries without opening heavyweight tools.
 
 ## Quick Start
 
@@ -25,6 +25,11 @@ Peekerino loads options from `appsettings.json` (copied alongside the executable
       "JsonMaxCharacters": 40000,
       "ArchiveMaxEntries": 100,
       "ArchivePreviewBytes": 512,
+      "ExcelMaxSheets": 3,
+      "ExcelMaxRows": 100,
+      "ExcelMaxColumns": 20,
+      "ExcelMaxRowsToScan": 2000,
+      "ExcelMaxCellCharacters": 120,
       "BinaryHeaderBytes": 256,
       "BinaryEntropySampleBytes": 65536,
       "BinaryStringScanBytes": 4096,
@@ -64,6 +69,7 @@ Packages land in `bin/<Configuration>/net9.0-windows/<Runtime>/publish/`.
 │   ├── ArchiveSummaryService.cs   # Zip/Tar/Tgz/GZip table-of-contents + preview pipeline
 │   ├── BinarySummaryService.cs    # Signature, SHA256, entropy, printable strings
 │   ├── CsvSummarizer.cs           # Column listing, numeric stats, preview rows
+│   ├── ExcelSummaryService.cs     # Limits sheet/row/column sampling for Excel files
 │   ├── FileSummaryResult.cs       # Summary DTO with tables + text preview
 │   ├── FileSummaryService.cs      # Orchestrates IFileSummarizer plugins
 │   ├── IncaDocumentSummarizer.cs  # Specialized INCA insurance XML summary
@@ -72,7 +78,7 @@ Packages land in `bin/<Configuration>/net9.0-windows/<Runtime>/publish/`.
 │   │   ├── FileSummaryContext.cs  # Info passed to each summarizer
 │   │   ├── FileTypeInspector.cs   # Heuristics for XML/JSON/archive/text detection
 │   │   ├── IFileSummarizer.cs     # Interface for summary plugins
-│   │   ├── ArchiveFileSummarizer.cs, CsvFileSummarizer.cs, ...
+│   │   ├── ArchiveFileSummarizer.cs, CsvFileSummarizer.cs, ExcelFileSummarizer.cs, ...
 │   └── TextTableBuilder.cs        # ASCII table formatter used by archive/csv summaries
 ├── Shell/
 │   └── ExplorerSelectionProvider.cs # COM interop to fetch Explorer selection

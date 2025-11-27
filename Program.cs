@@ -44,6 +44,7 @@ namespace Peekerino
 
             services.AddSingleton<IFileSummarizer, XmlFileSummarizer>();
             services.AddSingleton<IFileSummarizer, CsvFileSummarizer>();
+            services.AddSingleton<IFileSummarizer, ExcelFileSummarizer>();
             services.AddSingleton<IFileSummarizer, JsonFileSummarizer>();
             services.AddSingleton<IFileSummarizer, ArchiveFileSummarizer>();
             services.AddSingleton<IFileSummarizer, TextFileSummarizer>();
