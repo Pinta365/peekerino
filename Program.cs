@@ -42,6 +42,7 @@ namespace Peekerino
             services.AddSingleton<ExplorerSelectionProvider>();
             services.AddSingleton<FileSummaryService>();
 
+            services.AddSingleton<IFileSummarizer, AlteryxWorkflowSummarizer>();
             services.AddSingleton<IFileSummarizer, XmlFileSummarizer>();
             services.AddSingleton<IFileSummarizer, CsvFileSummarizer>();
             services.AddSingleton<IFileSummarizer, MarkdownFileSummarizer>();
