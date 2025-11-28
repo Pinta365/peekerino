@@ -125,6 +125,32 @@ jobs:
             break
           }
 
+          $description = "A lightweight Windows tray app for peeking at file contents with a single hotkey."
+          $readmePath = Join-Path $PWD "README.md"
+          if (Test-Path $readmePath) {
+            $readmeLines = Get-Content $readmePath
+            $paragraphLines = New-Object System.Collections.Generic.List[string]
+            $collecting = $false
+
+            foreach ($line in $readmeLines) {
+              $trimmed = $line.Trim()
+              if (-not $collecting) {
+                if ([string]::IsNullOrWhiteSpace($trimmed)) { continue }
+                if ($trimmed.StartsWith("#")) { continue }
+                $paragraphLines.Add($trimmed)
+                $collecting = $true
+                continue
+              }
+
+              if ([string]::IsNullOrWhiteSpace($trimmed)) { break }
+              $paragraphLines.Add($trimmed)
+            }
+
+            if ($paragraphLines.Count -gt 0) {
+              $description = [string]::Join(" ", $paragraphLines)
+            }
+          }
+
           if ($previousTag) {
             $range = "$previousTag..$currentTag"
             $changes = git log $range --no-merges '--pretty=format:- %h %s'
@@ -141,14 +167,14 @@ jobs:
           $lines = @(
             "## Peekerino $currentTag",
             "",
-            "A lightweight Windows tray app for peeking at file contents (CSV, JSON, XML, ZIP/TAR, binaries) with a single hotkey.",
+            $description,
             "",
             "### 📦 Downloads",
             "",
             "- **Peekerino-$currentTag-win-x64.zip** - Self-contained build for 64-bit Windows",
             "- **Peekerino-$currentTag-win-arm64.zip** - Self-contained build for ARM64 Windows",
             "",
-            "Each package contains the single-file executable and config (`appsettings.json`).",
+            'Each package contains the single-file executable and config (`appsettings.json`).',
             "",
             $changesHeading,
             ""
