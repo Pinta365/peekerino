@@ -31,6 +31,9 @@ namespace Peekerino.Configuration
             public int BinaryStringSampleCount { get; set; } = 5;
             public int BinaryMinStringLength { get; set; } = 4;
             public int BinaryMaxStringLength { get; set; } = 40;
+            public int YxdbMaxRows { get; set; } = 15;
+            public int YxdbMaxColumns { get; set; } = 25;
+            public int YxdbMaxValueLength { get; set; } = 200;
         }
     }
 }

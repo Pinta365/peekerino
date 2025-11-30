@@ -1,6 +1,6 @@
 # Peekerino
 
-Peekerino is a Windows tray utility that lets you press `Ctrl+Alt+Space` in File Explorer to peek at the selected item. It shows metadata, previews text files, streams CSV rows with quick stats, outlines Markdown headings, samples Excel sheets, summarizes Alteryx workflows, summarizes XML files, pretty-prints JSON, lists ZIP contents, and analyzes binaries without opening heavyweight tools.
+Peekerino is a Windows tray utility that lets you press `Ctrl+Alt+Space` in File Explorer to peek at the selected item. It shows metadata, previews text files, streams CSV rows with quick stats, outlines Markdown headings, samples Excel sheets, summarizes Alteryx workflows, reads Alteryx database tables (YXDB), summarizes XML files, pretty-prints JSON, lists ZIP contents, and analyzes binaries without opening heavyweight tools.
 
 ## Quick Start
 
@@ -34,7 +34,12 @@ Peekerino loads options from `appsettings.json` (copied alongside the executable
       "BinaryHeaderBytes": 256,
       "BinaryEntropySampleBytes": 65536,
       "BinaryStringScanBytes": 4096,
-      "BinaryStringSampleCount": 5
+      "BinaryStringSampleCount": 5,
+      "BinaryMinStringLength": 4,
+      "BinaryMaxStringLength": 40,
+      "YxdbMaxRows": 15,
+      "YxdbMaxColumns": 25,
+      "YxdbMaxValueLength": 200
     }
   }
 }

@@ -33,5 +33,8 @@
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Reference Include="YxdbNet">
+      <HintPath>libs\YxdbNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
